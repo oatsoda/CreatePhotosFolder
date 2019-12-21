@@ -1,0 +1,1 @@
+﻿Create shortcut to .exe in shell:sendto folder (Start > Run > "shell:sendto")

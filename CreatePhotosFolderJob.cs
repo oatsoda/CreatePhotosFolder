@@ -103,13 +103,16 @@ namespace CreatePhotosFolder
                 }
                 else
                 {
-                    var dateTaken = GetDateTakenFromImage(file);
+                    if (AddDatesToFolderName)
+                    { 
+                        var dateTaken = GetDateTakenFromImage(file);
 
-                    if (file.CreationTime < minDate)
-                        minDate = dateTaken;
+                        if (file.CreationTime < minDate)
+                            minDate = dateTaken;
 
-                    if (file.CreationTime > maxDate)
-                        maxDate = dateTaken;
+                        if (file.CreationTime > maxDate)
+                            maxDate = dateTaken;
+                    }
                 }
 
                 c++; 
