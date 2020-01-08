@@ -60,9 +60,9 @@
             this.cbParent.DisplayMember = "Name";
             this.cbParent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbParent.FormattingEnabled = true;
-            this.cbParent.Location = new System.Drawing.Point(82, 49);
+            this.cbParent.Location = new System.Drawing.Point(98, 71);
             this.cbParent.Name = "cbParent";
-            this.cbParent.Size = new System.Drawing.Size(297, 21);
+            this.cbParent.Size = new System.Drawing.Size(419, 21);
             this.cbParent.TabIndex = 0;
             this.cbParent.SelectedIndexChanged += new System.EventHandler(this.CbParent_SelectedIndexChanged);
             // 
@@ -73,11 +73,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 52);
+            this.label1.Location = new System.Drawing.Point(8, 74);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 13);
+            this.label1.Size = new System.Drawing.Size(75, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Create In:";
+            this.label1.Text = "Photos Folder:";
             // 
             // cbFolder
             // 
@@ -87,16 +87,16 @@
             this.cbFolder.DisplayMember = "Name";
             this.cbFolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
             this.cbFolder.FormattingEnabled = true;
-            this.cbFolder.Location = new System.Drawing.Point(82, 85);
+            this.cbFolder.Location = new System.Drawing.Point(98, 15);
             this.cbFolder.Name = "cbFolder";
-            this.cbFolder.Size = new System.Drawing.Size(297, 21);
+            this.cbFolder.Size = new System.Drawing.Size(419, 21);
             this.cbFolder.TabIndex = 1;
             this.cbFolder.TextUpdate += new System.EventHandler(this.CbFolder_TextUpdate);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 88);
+            this.label2.Location = new System.Drawing.Point(14, 18);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 13);
             this.label2.TabIndex = 3;
@@ -105,7 +105,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(303, 121);
+            this.btnCancel.Location = new System.Drawing.Point(441, 132);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(76, 23);
             this.btnCancel.TabIndex = 3;
@@ -117,7 +117,7 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.Enabled = false;
-            this.btnOK.Location = new System.Drawing.Point(221, 121);
+            this.btnOK.Location = new System.Drawing.Point(359, 132);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(76, 23);
             this.btnOK.TabIndex = 2;
@@ -131,13 +131,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.Location = new System.Drawing.Point(12, 48);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(367, 23);
+            this.progressBar.Size = new System.Drawing.Size(506, 23);
             this.progressBar.TabIndex = 6;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 16);
+            this.label3.Location = new System.Drawing.Point(42, 110);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(76, 13);
             this.label3.TabIndex = 7;
@@ -146,7 +146,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(183, 16);
+            this.label4.Location = new System.Drawing.Point(26, 135);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(92, 13);
             this.label4.TabIndex = 8;
@@ -155,7 +155,7 @@
             // lblFileCount
             // 
             this.lblFileCount.AutoSize = true;
-            this.lblFileCount.Location = new System.Drawing.Point(110, 16);
+            this.lblFileCount.Location = new System.Drawing.Point(129, 110);
             this.lblFileCount.Name = "lblFileCount";
             this.lblFileCount.Size = new System.Drawing.Size(13, 13);
             this.lblFileCount.TabIndex = 9;
@@ -164,7 +164,7 @@
             // lblImageCount
             // 
             this.lblImageCount.AutoSize = true;
-            this.lblImageCount.Location = new System.Drawing.Point(296, 16);
+            this.lblImageCount.Location = new System.Drawing.Point(129, 135);
             this.lblImageCount.Name = "lblImageCount";
             this.lblImageCount.Size = new System.Drawing.Size(13, 13);
             this.lblImageCount.TabIndex = 10;
@@ -186,25 +186,27 @@
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(390, 158);
+            this.mainPanel.Size = new System.Drawing.Size(529, 167);
             this.mainPanel.TabIndex = 11;
             // 
             // cbDates
             // 
             this.cbDates.AutoSize = true;
-            this.cbDates.Location = new System.Drawing.Point(12, 125);
+            this.cbDates.Location = new System.Drawing.Point(371, 42);
             this.cbDates.Name = "cbDates";
-            this.cbDates.Size = new System.Drawing.Size(144, 17);
+            this.cbDates.Size = new System.Drawing.Size(146, 17);
             this.cbDates.TabIndex = 12;
-            this.cbDates.Text = "Add dates to folder name";
+            this.cbDates.Text = "Add dates to album name";
             this.cbDates.UseVisualStyleBackColor = true;
             this.cbDates.CheckedChanged += new System.EventHandler(this.CbDates_CheckedChanged);
             // 
             // lblProgress
             // 
+            this.lblProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblProgress.Location = new System.Drawing.Point(12, 11);
             this.lblProgress.Name = "lblProgress";
-            this.lblProgress.Size = new System.Drawing.Size(366, 24);
+            this.lblProgress.Size = new System.Drawing.Size(505, 24);
             this.lblProgress.TabIndex = 11;
             this.lblProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -215,16 +217,17 @@
             this.bottomPanel.Controls.Add(this.progressBar);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.bottomPanel.Enabled = false;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 153);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 166);
             this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(390, 122);
+            this.bottomPanel.Size = new System.Drawing.Size(529, 122);
             this.bottomPanel.TabIndex = 12;
+            this.bottomPanel.Visible = false;
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.Enabled = false;
-            this.btnClose.Location = new System.Drawing.Point(158, 84);
+            this.btnClose.Location = new System.Drawing.Point(229, 85);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(76, 23);
             this.btnClose.TabIndex = 13;
@@ -236,7 +239,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(390, 275);
+            this.ClientSize = new System.Drawing.Size(529, 288);
             this.Controls.Add(this.bottomPanel);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -244,7 +247,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CreatePhotosFolderForm";
-            this.Text = "Create Photos Folder";
+            this.Text = "Move to Photo Album";
             ((System.ComponentModel.ISupportInitialize)(this.parentFolderBindingSource)).EndInit();
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();

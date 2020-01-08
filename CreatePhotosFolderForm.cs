@@ -15,6 +15,8 @@ namespace CreatePhotosFolder
 
             m_Job = new CreatePhotosFolderJob(args);
             m_Job.ProgressUpdate += M_Job_ProgressUpdate;
+
+            Height -= bottomPanel.Height;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -24,7 +26,7 @@ namespace CreatePhotosFolder
 
             var parentFolders = new List<ParentFolder>
             {
-                new ParentFolder("Pictures", $@"{Environment.ExpandEnvironmentVariables("%userprofile%")}\Pictures\")
+                new ParentFolder("Pictures", Environment.GetFolderPath(Environment.SpecialFolder.MyPictures))
             };
 
             var custom = ConfigurationManager.AppSettings["CustomPath"];
@@ -81,7 +83,8 @@ namespace CreatePhotosFolder
         private async void BtnOK_Click(object sender, EventArgs e)
         {
             mainPanel.Enabled = false;
-            bottomPanel.Enabled = true;
+            bottomPanel.Visible = bottomPanel.Enabled = true;
+            Height += bottomPanel.Height;
             var result = await m_Job.MoveFiles();
             lblProgress.Text = result.Success ? "Files moved successfully" : $"Failed: {result.FailureReason}";
             btnClose.Enabled = true;
