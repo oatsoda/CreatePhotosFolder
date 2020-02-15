@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4083A609-5D90-4FB1-B0B8-241240C3FFDB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>CreatePhotosFolder</RootNamespace>
-    <AssemblyName>CreatePhotosFolder</AssemblyName>
+    <RootNamespace>CreatePhotosFolder.App</RootNamespace>
+    <AssemblyName>CreatePhotosFolder.App</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -78,6 +78,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\DataSources\ParentItem.datasource" />
     <None Include="Properties\Settings.settings">
@@ -95,9 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="picture.ico" />
-    <None Include="Readme.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" 
+           Name="Create Photos Folder" 
+           Language="1033" 
+           Version="1.0.0.0"
+           Manufacturer="Andrew Milne" 
+           UpgradeCode="fe7b3f23-4f1b-49a0-967e-fb382d2a44b7">
+		<Package InstallerVersion="200" 
+             Compressed="yes" 
+             InstallScope="perUser"
+             InstallPrivileges="limited"   />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="icon.ico" SourceFile="..\CreatePhotosFolder.App\picture.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+		<Feature Id="ProductFeature" Title="Create Photos Folder" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="ProductShortcuts" />
+		</Feature>
+
+    <UIRef Id="WixUI_Minimal" />
+    <!-- TODO: https://stackoverflow.com/questions/13045658/removing-license-dialog -->
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="LocalAppDataFolder">
+        <Directory Id="INSTALLFOLDER" Name="Create Photos Folder">
+        </Directory>
+			</Directory>
+      <Directory Id="SendToFolder" />
+		</Directory>
+    
+	</Fragment>
+
+  <Fragment>
+  </Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="ProductComponent" Guid="2F9B7ECA-0055-41A6-87C4-D8A71C51B54B">
+
+        <RegistryValue Root="HKCU" Key="Software\AndrewMilne\CreatePhotosFolder"
+                       Name='CompAppExe'
+                       Value='[INSTALLFOLDER]'
+                       Type='string'
+                       KeyPath='yes' />        
+        <File Id="AppExe" Source="$(var.CreatePhotosFolder.App.TargetPath)" />
+      </Component>
+      <Component Id="ProductConfigComponent" Guid="485803B8-62E5-463C-962F-78CC939DD578">
+
+        <RegistryValue Root="HKCU" Key="Software\AndrewMilne\CreatePhotosFolder"
+                       Name='CompAppConfig'
+                       Value='[INSTALLFOLDER]'
+                       Type='string'
+                       KeyPath='yes' />
+        <File Id="AppConfig" Source="$(var.CreatePhotosFolder.App.TargetPath).config" />
+      </Component>
+      <Component Id="RemoveProgramFolder" Guid="685F4BB5-F80F-4BC5-8ABD-9587DB28FB66">
+
+        <RegistryValue Root="HKCU" Key="Software\AndrewMilne\CreatePhotosFolder"
+                       Name='CompRemoveFolder'
+                       Value='[INSTALLFOLDER]'
+                       Type='string'
+                       KeyPath='yes' />
+        <RemoveFolder Id="INSTALLFOLDER"  On="uninstall" />
+      </Component>
+
+		</ComponentGroup>
+
+    <ComponentGroup Id="ProductShortcuts" Directory="SendToFolder">
+
+        <!-- shell:sendto -->
+        <Component Id="AppShortcut" Guid="D203745F-A640-4B31-9123-E25261ED0784">
+          <Shortcut Id="AppStartMenuShortcut"
+                    Name="Pictures Folder"
+                    Description="Move files to Pictures Folder"
+                    Target="[INSTALLFOLDER]$(var.CreatePhotosFolder.App.TargetFileName)"
+                    WorkingDirectory="INSTALLFOLDER"
+                    Icon="icon.ico"
+                    IconIndex="0" />
+          <RegistryValue Root="HKCU" Key="Software\AndrewMilne\CreatePhotosFolder"
+                         Name="installed"
+                         Type="integer" Value="1"
+                         KeyPath="yes"/>
+        </Component>
+    </ComponentGroup>
+	</Fragment>
+</Wix>
