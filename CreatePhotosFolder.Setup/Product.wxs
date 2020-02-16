@@ -3,7 +3,7 @@
 	<Product Id="*" 
            Name="Create Photos Folder" 
            Language="1033" 
-           Version="1.0.0.0"
+           Version="1.0.1.0"
            Manufacturer="Andrew Milne" 
            UpgradeCode="fe7b3f23-4f1b-49a0-967e-fb382d2a44b7">
 		<Package InstallerVersion="200" 
@@ -22,8 +22,19 @@
       <ComponentGroupRef Id="ProductShortcuts" />
 		</Feature>
 
-    <UIRef Id="WixUI_Minimal" />
-    <!-- TODO: https://stackoverflow.com/questions/13045658/removing-license-dialog -->
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <Publish Dialog="WelcomeDlg"
+            Control="Next"
+            Event="NewDialog"
+            Value="VerifyReadyDlg"
+            Order="99">1</Publish>
+      <Publish Dialog="VerifyReadyDlg"
+            Control="Back"
+            Event="NewDialog"
+            Value="WelcomeDlg"
+            Order="99">1</Publish>
+    </UI>
 	</Product>
 
 	<Fragment>

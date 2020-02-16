@@ -22,9 +22,6 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TextFile1.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CreatePhotosFolder.App\CreatePhotosFolder.App.csproj">
       <Name>CreatePhotosFolder.App</Name>
       <Project>{4083a609-5d90-4fb1-b0b8-241240c3ffdb}</Project>
