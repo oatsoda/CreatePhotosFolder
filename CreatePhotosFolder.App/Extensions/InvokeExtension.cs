@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace CreatePhotosFolder
+namespace CreatePhotosFolder.App.Extensions
 {
     public static class InvokeExtension
     {

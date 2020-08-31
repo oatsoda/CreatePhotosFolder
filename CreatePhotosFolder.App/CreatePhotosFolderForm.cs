@@ -1,43 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Linq;
 using System.Windows.Forms;
+using CreatePhotosFolder.App.Extensions;
+using CreatePhotosFolder.App.Job;
+using CreatePhotosFolder.App.Settings;
 
-namespace CreatePhotosFolder
+namespace CreatePhotosFolder.App
 {
     public partial class CreatePhotosFolderForm : Form
     {
-        private readonly CreatePhotosFolderJob m_Job;
+        private readonly JobSettings m_JobSettings;
 
-        public CreatePhotosFolderForm(string[] args)
+        public CreatePhotosFolderForm(IEnumerable<string> args)
         {            
             InitializeComponent();
 
-            m_Job = new CreatePhotosFolderJob(args);
-            m_Job.ProgressUpdate += M_Job_ProgressUpdate;
-
+            m_JobSettings = new JobSettings(args, JobProgressUpdate);
+            
             Height -= bottomPanel.Height;
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            lblFileCount.Text = m_Job.TotalFiles.ToString();
-            lblImageCount.Text = m_Job.TotalImageFiles.ToString();
+            lblFileCount.Text = m_JobSettings.TotalFiles.ToString();
+            lblImageCount.Text = m_JobSettings.TotalImageFiles.ToString();
 
-            var parentFolders = new List<ParentFolder>
-            {
-                new ParentFolder("Pictures", Environment.GetFolderPath(Environment.SpecialFolder.MyPictures))
-            };
-
-            var custom = ConfigurationManager.AppSettings["CustomPath"];
-            if (!string.IsNullOrWhiteSpace(custom))
-                parentFolders.Add(new ParentFolder(custom, custom));
-
-            cbParent.DataSource = parentFolders;
+            cbDates.Checked = UserSettings.Settings.PrependDates;
             
+            var parentFolders = RootFolders.LoadPhotoRootFolders();
+            cbParent.DataSource = parentFolders;
+            var lastParentFolder = parentFolders.FirstOrDefault(f => string.Equals(f.Name, UserSettings.Settings.LastRootFolder, StringComparison.InvariantCultureIgnoreCase));
+            if (lastParentFolder != null)
+                cbParent.SelectedItem = lastParentFolder;
+
+            cbFolder.Text = UserSettings.Settings.LastAlbumFolder;
+            cbFolder.SelectAll();
+
+            SetJobSettings();
+
             base.OnLoad(e);
         }
-
+        
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
@@ -45,29 +49,33 @@ namespace CreatePhotosFolder
             cbFolder.Focus();
         }
 
+        private void SetJobSettings()
+        {
+            m_JobSettings.AddDatesToFolderName = cbDates.Checked;
+            m_JobSettings.RootFolder = (RootFolder)cbParent.SelectedItem;
+            m_JobSettings.AlbumFolderName = cbFolder.Text;
+            btnOK.Enabled = m_JobSettings.SettingsValid;
+        }
+
+        private void SaveUserSettings()
+        {
+            UserSettings.Settings.PrependDates = cbDates.Checked;
+            UserSettings.Settings.LastRootFolder = cbParent.Text;
+            UserSettings.Settings.LastAlbumFolder = cbFolder.Text;
+            UserSettings.Settings.Save();
+        }
+
         #region Control Updates
 
-        private void CbParent_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            m_Job.ParentFolder = (ParentFolder)cbParent.SelectedItem;
-        }
-
-        private void CbFolder_TextUpdate(object sender, EventArgs e)
-        {
-            btnOK.Enabled = !string.IsNullOrWhiteSpace(cbFolder.Text);
-            m_Job.AlbumFolderName = cbFolder.Text;
-        }
-
-        private void CbDates_CheckedChanged(object sender, EventArgs e)
-        {
-            m_Job.AddDatesToFolderName = cbDates.Checked;
-        }
+        private void CbParent_SelectedIndexChanged(object sender, EventArgs e) => SetJobSettings();
+        private void CbFolder_TextUpdate(object sender, EventArgs e) => SetJobSettings();
+        private void CbDates_CheckedChanged(object sender, EventArgs e) => SetJobSettings();
 
         #endregion
 
         #region Job Updates
 
-        private void M_Job_ProgressUpdate(object sender, ProgressUpdateEventArgs e)
+        private void JobProgressUpdate(ProgressUpdateEventArgs e)
         {
             this.InvokeIfRequired(() =>
             {
@@ -84,8 +92,14 @@ namespace CreatePhotosFolder
         {
             mainPanel.Enabled = false;
             bottomPanel.Visible = bottomPanel.Enabled = true;
+
+            SaveUserSettings();
+
             Height += bottomPanel.Height;
-            var result = await m_Job.MoveFiles();
+
+            var job = new CreatePhotosFolderJob(m_JobSettings);
+            var result = await job.MoveFiles();
+
             lblProgress.Text = result.Success ? "Files moved successfully" : $"Failed: {result.FailureReason}";
             btnClose.Enabled = true;
 

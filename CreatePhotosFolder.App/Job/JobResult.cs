@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace CreatePhotosFolder
+namespace CreatePhotosFolder.App.Job
 {
     public class JobResult
     {

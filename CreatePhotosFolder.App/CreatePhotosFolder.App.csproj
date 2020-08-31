@@ -53,7 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreatePhotosFolderJob.cs" />
+    <Compile Include="Job\JobSettings.cs" />
+    <Compile Include="Settings\AppSettings.cs" />
+    <Compile Include="Job\CreatePhotosFolderJob.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="CreatePhotosFolderForm.cs">
       <SubType>Form</SubType>
@@ -61,12 +63,15 @@
     <Compile Include="CreatePhotosFolderForm.Designer.cs">
       <DependentUpon>CreatePhotosFolderForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="InvokeExtension.cs" />
-    <Compile Include="JobResult.cs" />
-    <Compile Include="ParentFolder.cs" />
+    <Compile Include="Extensions\InvokeExtension.cs" />
+    <Compile Include="Extensions\FileInfoImageExtensions.cs" />
+    <Compile Include="Job\JobResult.cs" />
+    <Compile Include="Settings\RootFolder.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProgressUpdateEventArgs.cs" />
+    <Compile Include="Job\ProgressUpdateEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\RootFolders.cs" />
+    <Compile Include="Settings\UserSettings.cs" />
     <EmbeddedResource Include="CreatePhotosFolderForm.resx">
       <DependentUpon>CreatePhotosFolderForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -97,5 +102,6 @@
   <ItemGroup>
     <Content Include="picture.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

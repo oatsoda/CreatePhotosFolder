@@ -1,11 +1,11 @@
-﻿namespace CreatePhotosFolder
+﻿namespace CreatePhotosFolder.App.Settings
 {
-    public class ParentFolder
+    public class RootFolder
     {
         public string Name { get; }
         public string Path { get; }
 
-        public ParentFolder(string name, string path)
+        public RootFolder(string name, string path)
         {
             Name = name;
             Path = path;

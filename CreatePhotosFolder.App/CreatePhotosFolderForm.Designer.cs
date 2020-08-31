@@ -1,4 +1,6 @@
-﻿namespace CreatePhotosFolder
+﻿using CreatePhotosFolder.App.Settings;
+
+namespace CreatePhotosFolder.App
 {
     partial class CreatePhotosFolderForm
     {
@@ -68,7 +70,7 @@
             // 
             // parentFolderBindingSource
             // 
-            this.parentFolderBindingSource.DataSource = typeof(CreatePhotosFolder.ParentFolder);
+            this.parentFolderBindingSource.DataSource = typeof(RootFolder);
             // 
             // label1
             // 

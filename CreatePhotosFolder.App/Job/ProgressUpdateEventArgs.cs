@@ -1,4 +1,4 @@
-﻿namespace CreatePhotosFolder
+﻿namespace CreatePhotosFolder.App.Job
 {
     public class ProgressUpdateEventArgs
     {
