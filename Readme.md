@@ -3,4 +3,4 @@
 # Notes
 - picture.ico from https://www.svgrepo.com/svg/148132/picture
 - Release version set in /App/Properties/AssemblyInfo.cs and /Setup/Product.wxs
-- For Debugging, add arguments to Debug tab on Product
+- For Debugging, add arguments to Debug tab in Project Properties
