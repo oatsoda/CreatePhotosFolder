@@ -100,11 +100,13 @@ namespace CreatePhotosFolder.App
             var job = new CreatePhotosFolderJob(m_JobSettings);
             var result = await job.MoveFiles();
 
-            lblProgress.Text = result.Success ? "Files moved successfully" : $"Failed: {result.FailureReason}";
+            lblProgress.Text = result.OverallDescription;
             btnClose.Enabled = true;
 
             if (!result.Success)
-                MessageBox.Show(this, result.FailureReason, "Failed to move files", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, result.FlattenFailures(15), result.OverallDescription, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (result.Warnings.Count > 0)
+                MessageBox.Show(this, result.FlattenWarnings(15), result.OverallDescription, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)

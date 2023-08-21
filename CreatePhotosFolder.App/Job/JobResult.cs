@@ -5,38 +5,41 @@ namespace CreatePhotosFolder.App.Job
 {
     public class JobResult
     {
-        private const int _MAX_ERRORS = 10;
-
         public bool Success { get; }
-        public string FailureReason { get; }
+        public string OverallDescription { get; }
 
-        public JobResult()
+        public IReadOnlyList<string> Failures { get; }
+        public IReadOnlyList<string> Warnings { get; }
+
+        /// <summary>
+        /// Success.
+        /// </summary>
+        public JobResult(bool datesMayBeIncorrect, IReadOnlyList<string> warnings)
         {
             Success = true;
+            OverallDescription = datesMayBeIncorrect
+                ? "Files moved, but some dates could not be determined"
+                : "Files moved successfully";
+            Warnings = warnings;
         }
 
-        private JobResult(string failureReason)
+        public JobResult(string failureDescription, IReadOnlyList<string> warnings, IReadOnlyList<string> failureReasons)
         {
             Success = false;
-            FailureReason = failureReason;
+            OverallDescription = $"Failed: {failureDescription}";
+            Warnings = warnings;
+            Failures = failureReasons;
         }
 
-        public JobResult(IEnumerable<string> failureReasons) 
-            : this(Flatten(failureReasons))
-        {
-        }
+        public string FlattenFailures(int max) => Flatten(Failures, max);
+        public string FlattenWarnings(int max) => Flatten(Warnings, max);
 
-        public JobResult(string failureDescription, IEnumerable<string> failureReasons = null)
-            : this($"{failureDescription}: {Flatten(failureReasons)}")
-        {
-        }
-
-        private static string Flatten(IEnumerable<string> entries)
+        private static string Flatten(IEnumerable<string> entries, int max)
         {
             if (entries == null)
                 return null;
 
-            return string.Join("\r\n", entries.Take(_MAX_ERRORS));
+            return string.Join("\r\n", entries.Take(max));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CreatePhotosFolder.App.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,9 @@ namespace CreatePhotosFolder.App.Job
     {
         private readonly JobSettings m_Settings;
 
-        private JobResult m_JobResult;
+        private List<string> m_Failures = new List<string>();
+        private List<string> m_Warnings = new List<string>();
+        private bool m_DatesMayBeIncorrect;
 
         private string m_CurrentOperation;
 
@@ -40,47 +43,38 @@ namespace CreatePhotosFolder.App.Job
 
         private JobResult MoveFilesInternal()
         {
-            m_JobResult = new JobResult();
-            
             m_CurrentOperation = "Validating files";
             OnProgress(0, m_CurrentOperation);
 
-            PrepareFiles();
-
-            if (!m_JobResult.Success)
-                return m_JobResult;
+            if (!PrepareFiles())
+                return new JobResult(m_CurrentOperation, m_Warnings, m_Failures);
 
             m_CurrentOperation = "Copying files to new location";
             OnProgress(0, m_CurrentOperation);
 
-            CopyFiles();
-
-            if (!m_JobResult.Success)
-                return m_JobResult;
+            if (!CopyFiles())
+                return new JobResult(m_CurrentOperation, m_Warnings, m_Failures);
 
             m_CurrentOperation = "Verifying copied files";
             OnProgress(0, m_CurrentOperation);
 
-            VerifyCopiedFiles();
-            
-            if (!m_JobResult.Success)
-                return m_JobResult;
+            if (!VerifyCopiedFiles())
+                return new JobResult(m_CurrentOperation, m_Warnings, m_Failures);
 
             m_CurrentOperation = "Deleting source files";
             OnProgress(0, m_CurrentOperation);
 
             DeleteSourceFiles();
 
-            return m_JobResult;
+            return new JobResult(m_DatesMayBeIncorrect, m_Warnings);
         }
 
-        private void PrepareFiles()
+        private bool PrepareFiles()
         {
             var failures = new List<string>();
 
             var minDate = DateTime.MaxValue;
             var maxDate = DateTime.MinValue;
-
 
             var c = 0;
             foreach (var file in m_Settings.RequestedFiles)
@@ -93,13 +87,19 @@ namespace CreatePhotosFolder.App.Job
                 {
                     if (m_Settings.AddDatesToFolderName)
                     { 
-                        var dateTaken = file.GetDateTakenFromImage();
+                        if (file.GetDateTakenFromImage(out var dateTaken))
+                        {
+                            if (dateTaken < minDate)
+                                minDate = dateTaken;
 
-                        if (file.CreationTime < minDate)
-                            minDate = dateTaken;
-
-                        if (file.CreationTime > maxDate)
-                            maxDate = dateTaken;
+                            if (dateTaken > maxDate)
+                                maxDate = dateTaken;
+                        }
+                        else
+                        {
+                            m_Warnings.Add($"Failed to determine date taken of {file.Name}");
+                            m_DatesMayBeIncorrect = true;
+                        }
                     }
                 }
 
@@ -125,12 +125,13 @@ namespace CreatePhotosFolder.App.Job
                              );
 
             if (!failures.Any())
-                return;
+                return true;
 
-            m_JobResult = new JobResult(failures);
+            m_Failures.AddRange(failures);
+            return false;
         }
 
-        private void CopyFiles()
+        private bool CopyFiles()
         {
             var destinationFolder = m_Settings.DestinationFolder;
             try
@@ -140,8 +141,8 @@ namespace CreatePhotosFolder.App.Job
             }
             catch (Exception ex)
             {
-                m_JobResult = new JobResult($"Folder '{destinationFolder}' failed to create: \r\n {ex.Message}");
-                return;
+                m_Failures.Add($"Folder '{destinationFolder}' failed to create: \r\n {ex.Message}");
+                return false;
             }
 
             var f = 0;
@@ -154,17 +155,19 @@ namespace CreatePhotosFolder.App.Job
                 }
                 catch (Exception ex)
                 {
-                    m_JobResult = new JobResult($"Failed to copy '{file.Name}' to new '{destinationFolder}': \r\n {ex.Message}");
-                    return;
-                    // TODO: Clean Up?
+                    m_Failures.Add($"Failed to copy '{file.Name}' to new '{destinationFolder}': \r\n {ex.Message}");
+                    return false;
+                    // TODO: Clean Up any that did copy?
                 }
 
                 f++; 
                 OnProgress(Percentage(f), m_CurrentOperation);
-            }            
+            }
+            
+            return true;
         }
 
-        private void VerifyCopiedFiles()
+        private bool VerifyCopiedFiles()
         {
             var destinationFolder = m_Settings.DestinationFolder;
 
@@ -186,14 +189,18 @@ namespace CreatePhotosFolder.App.Job
 
             if (notExist.Any())
             {
-                m_JobResult = new JobResult("Files do not exist in destination", notExist);
-                return;
+                m_Failures.Add("Files do not exist in destination");
+                m_Failures.AddRange(notExist);
+                return false;
             }           
 
             if (!mismatchedSize.Any())
-                return;
+                return true;
+            
+            m_Failures.Add("Files mismatched sizes");
+            m_Failures.AddRange(mismatchedSize);
 
-            m_JobResult = new JobResult("Files mismatched sizes", mismatchedSize);
+            return false;
         }
 
         private void DeleteSourceFiles()
@@ -207,9 +214,8 @@ namespace CreatePhotosFolder.App.Job
                 }
                 catch (Exception ex)
                 {
-                    m_JobResult = new JobResult($"Failed to delete original '{file.Name}': \r\n {ex.Message}");
-                    return;
-                    // TODO: Clean Up?
+                    Trace.WriteLine($"Exception deleting file {file.Name}: {ex}");
+                    m_Warnings.Add($"Failed to delete original '{file.Name}': \r\n {ex.Message}");
                 }
 
                 f++; 

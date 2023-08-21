@@ -12,7 +12,7 @@ namespace CreatePhotosFolder.App.Extensions
     {
         private static readonly Regex s_Regex = new Regex(":");
 
-        public static DateTime GetDateTakenFromImage(this FileInfo image)
+        public static bool GetDateTakenFromImage(this FileInfo image, out DateTime dateTaken)
         {
             //retrieves the datetime WITHOUT loading the whole image
             try
@@ -21,14 +21,15 @@ namespace CreatePhotosFolder.App.Extensions
                 using (var myImage = Image.FromStream(fs, false, false))
                 {
                     var propItem = myImage.GetPropertyItem(36867);
-                    var dateTaken = s_Regex.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                    return DateTime.Parse(dateTaken);
+                    var dateTakenString = s_Regex.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+                    return DateTime.TryParse(dateTakenString, out dateTaken);
                 }
             }
             catch (ArgumentException ex)
             {
                 Trace.WriteLine($"Exception getting Date Taken: {ex}");
-                return image.CreationTime;
+                dateTaken = DateTime.MinValue;
+                return false;
             }
         }
 
