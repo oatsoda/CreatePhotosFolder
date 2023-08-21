@@ -14,5 +14,11 @@
     <Setting Name="LastAlbumFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="AdditionalRootFolderPaths" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ImageExtensions" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.jpg;.gif;.png</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

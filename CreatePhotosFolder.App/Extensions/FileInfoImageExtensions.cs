@@ -33,9 +33,6 @@ namespace CreatePhotosFolder.App.Extensions
             }
         }
 
-        public static bool IsImageFile(this FileInfo fileInfo)
-        {
-            return AppSettings.Settings.Value.IsImageFile(fileInfo.Extension);
-        }
+        public static bool IsImageFile(this FileInfo fileInfo) => UserSettings.IsImageFile(fileInfo.Extension);
     }
 }
